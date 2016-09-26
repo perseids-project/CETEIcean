@@ -81,8 +81,14 @@ class CETEI {
                 break;
               }
             default:
-              newElement = document.importNode(el, false);
-              copy = true;
+              // hack for treebank elements
+              if (el.tagName == 'treebank' || el.tagName == 'sentence' ||
+                  el.tagName == 'word') {
+                  newElement = document.createElement("tb-" + el.tagName);
+              } else {
+                  newElement = document.importNode(el, false);
+                  copy = true;
+              }
           }
           // Copy attributes; @xmlns, @xml:id, @xml:lang, and
           // @rendition get special handling.
@@ -252,6 +258,8 @@ class CETEI {
     tagName(name) {
       if (name == "egXML") {
         return "teieg-" + name;
+      } else if (name == "treebank" || name == "word" || name == "sentence") {
+        return "tb-" + name;
       } else {
         return "tei-" + name;
       }
